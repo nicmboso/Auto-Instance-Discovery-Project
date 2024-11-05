@@ -17,8 +17,6 @@ resource "aws_instance" "sonarqube" {
 resource "aws_elb" "sonar-elb" {
   name            = "sonar-elb"
   security_groups = [var.sonar-sg]
-  # availability_zones = ["eu-west-1a", "eu-west-1b"] #specify parameter az when u are referencing default vpc
-  #but since we aare referecing our own custom vpc, we need to specify parameter subnet as below
   subnets = var.pub-subnets
 
   listener {
