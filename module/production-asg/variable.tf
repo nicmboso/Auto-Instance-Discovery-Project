@@ -1,0 +1,14 @@
+variable "vpc-id" {}
+variable "prod-sg" {}
+variable "prod-subnets" {}
+variable "alb-prod-name" {}
+variable "cert-arn" {}
+variable "redhat" {}
+variable "pub-key" {}
+variable "nex-ip" {}
+variable "newrelic-user-licence" {}
+variable "newrelic-acct-id" {}
+variable "newrelic-reg" {}
+variable "prod-asg-name" {}
+variable "vpc-zone-identifier" {}
+variable "prod-asg-policy-name" {}

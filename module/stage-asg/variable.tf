@@ -1,0 +1,15 @@
+variable "vpc-id" {}
+variable "stage-id" {}
+variable "stage-sg" {}
+variable "priv-subnets" {}
+variable "alb-stage-name" {}
+variable "cert-arn" {}
+variable "redhat" {}
+variable "pub-key" {}
+variable "nex-ip" {}
+variable "newrelic-user-licence" {}
+variable "newrelic-acct-id" {}
+variable "newrelic-reg" {}
+variable "stage-asg-name" {}
+variable "vpc-zone-identifier" {}
+variable "stage-asg-policy-name" {}
