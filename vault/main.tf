@@ -1,6 +1,7 @@
 provider "aws" {
-  region  = "eu-west-1"
-  profile = "team2"
+  region  = "eu-central-1"
+  # region  = "eu-west-1"
+  profile = "team-20"
 }
 
 # dynamic keypair resource

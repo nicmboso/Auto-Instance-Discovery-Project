@@ -4,14 +4,15 @@
 BUCKET_NAME="nicc-s3bucket"
 DYNAMODB_TABLE_NAME="nicc-dynamoDB"
 REGION="eu-west-1"
-PROFILE="team2"
+PROFILE="personal"
+# PROFILE="team-20"
 
 # Create S3 Bucket
 echo "Creating S3 bucket: $BUCKET_NAME"
 aws s3api create-bucket --bucket $BUCKET_NAME --region $REGION --profile $PROFILE --create-bucket-configuration LocationConstraint=$REGION
 
 # Tagging the S3 bucket
-aws s3api put-bucket-tagging --bucket $BUCKET_NAME --tagging 'TagSet=[{Key=Name,Value=team2-remote-tf}]' --profile $PROFILE
+aws s3api put-bucket-tagging --bucket $BUCKET_NAME --tagging 'TagSet=[{Key=Name,Value=infra-discovery}]' --profile $PROFILE
 
 # Create DynamoDB Table
 echo "Creating DynamoDB table: $DYNAMODB_TABLE_NAME"

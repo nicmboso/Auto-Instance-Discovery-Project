@@ -4,7 +4,8 @@
 BUCKET_NAME="nicc-s3bucket"
 DYNAMODB_TABLE_NAME="nicc-dynamoDB"
 REGION="eu-west-1"
-PROFILE="team2"
+PROFILE="personal"
+# PROFILE="team-20"
 
 # Delete all objects in the S3 bucket
 echo "Deleting all objects in S3 bucket: $BUCKET_NAME"
