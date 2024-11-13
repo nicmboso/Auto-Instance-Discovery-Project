@@ -83,8 +83,8 @@ module "ansible" {
   nexus-ip             = module.nexus.nexus-ip
 }
 
-module "database" {
-  source       = "./modules/database"
+module "rds" {
+  source       = "./modules/rds"
   rds-subgroup = "rds_subgroup" #can be given any name
   rds-subnet   = [module.vpc.prvsub-1-id, module.vpc.prvsub-2-id]
   db-name      = "petclinic"

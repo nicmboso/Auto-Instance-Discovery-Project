@@ -1,6 +1,7 @@
 provider "aws" {
   region  = "eu-west-1"
-  profile = "team2"
+  profile = "personal"
+  # profile = "team-20"
 }
 
 resource "aws_instance" "jenkins" {
@@ -107,23 +108,23 @@ resource "aws_elb" "jenkins-elb" {
   }
 }
 
-data "aws_route53_zone" "route53" {
+data "aws_route53_zone" "dobetashop" {
   name         = "dobetabeta.shop"
   private_zone = false
 }
 
-# #IP address of jenkins is linked directly to route53
-resource "aws_route53_record" "jenkins_record" {
-  zone_id = data.aws_route53_zone.route53.zone_id
-  name    = "jenkins.dobetabeta.shop"
-  type    = "A"
-  ttl     = 300
-  records = [aws_instance.jenkins.public_ip]
-}
+# # #IP address of jenkins is linked directly to IP
+# resource "aws_route53_record" "jenkins_record" {
+#   zone_id = data.aws_route53_zone.route53.zone_id
+#   name    = "jenkins.dobetabeta.shop"
+#   type    = "A"
+#   ttl     = 300
+#   records = [aws_instance.jenkins.public_ip]
+# }
 
 # load balancer of jenkins is linked directly to route53
 resource "aws_route53_record" "jenkins_record" {
-  zone_id = data.aws_route53_zone.route53.zone_id
+  zone_id = data.aws_route53_zone.dobetashop.zone_id
   name    = "jenkins.dobetabeta.shop"
   type    = "A"
   alias {
@@ -158,7 +159,7 @@ resource "aws_route53_record" "validation-record" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = data.aws_route53_zone.route53.zone_id
+  zone_id         = data.aws_route53_zone.dobetashop.zone_id
 }
 
 #validates the record and acm is on aws account
