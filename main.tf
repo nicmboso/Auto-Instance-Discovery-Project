@@ -3,7 +3,7 @@ locals {
 }
 
 module "vpc" {
-  source   = "./modules/vpc"
+  source   = "./module/vpc"
   az1      = "eu-west-1a"
   az2      = "eu-west-1b"
   vpc-name = "${local.name}-vpc"
@@ -19,46 +19,46 @@ module "vpc" {
 }
 
 module "security-group" {
-  source = "./modules/security-group"
+  source = "./module/security-group"
   vpc-id = module.vpc.vpc-id
 }
 
 module "keypair" {
-  source       = "./modules/keypair"
+  source       = "./module/keypair"
   prv_filename = "${local.name}-private-key"
   pub_filename = "${local.name}-public-key"
 
 }
 
 module "docker" {
-  source       = "./modules/docker"
+  source       = "./module/docker"
   redhat       = "ami-07d4917b6f95f5c2a"
   docker-sg    = module.security-group.docker-sg
   subnet-id    = module.vpc.pubsub-1-id
   pub-key-name = module.keypair.public-key-id
 }
 
-module "bastion" {
-  source          = "./modules/bastion"
-  redhat          = "ami-07d4917b6f95f5c2a"
-  subnet-id       = module.vpc.pubsub-1-id
-  bastion-sg      = module.security-group.bastion-sg
-  public-key-name = module.keypair.public-key-id
-  private-key     = module.keypair.private-key-pem
+module "bastion-host" {
+  source = "./module/bastion-host"
+  redhat = "ami-07d4917b6f95f5c2a"
+  bastion-subnet = module.vpc.pubsub-1-id
+  bastion-sg = module.security-group.bastion-sg
+  public-key = module.keypair.public-key-id
+  private-key = module.keypair.private-key-pem
 }
 
 module "nexus" {
-  source       = "./modules/nexus"
-  redhat       = "ami-07d4917b6f95f5c2a"
-  nexus_subnet = module.vpc.pubsub-1-id
-  pub_key      = module.keypair.public-key-id
-  nexus-sg     = module.security-group.nexus-sg
-  cert-arn     = data.aws_acm_certificate.certificate.arn
-  subnets      = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id]
+  source = "./module/nexus"
+  redhat = "ami-07d4917b6f95f5c2a"
+  nexus-subnet = module.vpc.pubsub-1-id
+  public-key = module.keypair.public-key-id
+  nexus-sg = module.security-group.nexus-sg
+  pub-subnets = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id]
+  cert-arn = data.aws_acm_certificate.certificate.arn
 }
 
 module "sonar" {
-  source       = "./modules/sonar"
+  source       = "./module/sonar"
   ubuntu       = "ami-0c38b837cd80f13bb"
   pub_key      = module.keypair.public-key-id
   sonar-sg     = module.security-group.sonarqube-sg
@@ -68,7 +68,7 @@ module "sonar" {
 }
 
 module "ansible" {
-  source               = "./modules/ansible"
+  source               = "./module/ansible"
   redhat               = "ami-07d4917b6f95f5c2a"
   ansible-subnet       = module.vpc.prvsub-1-id
   pub-key              = module.keypair.public-key-id
@@ -77,14 +77,14 @@ module "ansible" {
   bastion-host         = module.bastion.bastion-ip
   newrelic-license-key = "${var.newrelic-api}"
   newrelic-acct-id     = "4566826"
-  deployment           = "./modules/ansible/deployment.yml"
-  prod-bashscript      = "./modules/ansible/prod-bashscript.sh"
-  stage-bashscript     = "./modules/ansible/stage-bashscript.sh"
+  deployment           = "./module/ansible/deployment.yml"
+  prod-bashscript      = "./module/ansible/prod-bashscript.sh"
+  stage-bashscript     = "./module/ansible/stage-bashscript.sh"
   nexus-ip             = module.nexus.nexus-ip
 }
 
 module "rds" {
-  source       = "./modules/rds"
+  source       = "./module/rds"
   rds-subgroup = "rds_subgroup" #can be given any name
   rds-subnet   = [module.vpc.prvsub-1-id, module.vpc.prvsub-2-id]
   db-name      = "petclinic"
@@ -94,7 +94,7 @@ module "rds" {
 }
 
 module "prod-asg" {
-  source        = "./modules/prod-asg"
+  source        = "./module/prod-asg"
   vpc-id        = module.vpc.vpc-id
   prod-sg       = module.security-group.docker-sg
   subnets       = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id] #under load balancer configuration
@@ -113,7 +113,7 @@ module "prod-asg" {
 }
 
 module "stage-asg" {
-  source   = "./modules/stage-asg"
+  source   = "./module/stage-asg"
   vpc-id   = module.vpc.vpc-id
   stage-sg = module.security-group.docker-sg
   #subnet variable is under load balancer configuration
@@ -132,7 +132,7 @@ module "stage-asg" {
 }
 
 module "route53" {
-  source                = "./modules/route53"
+  source                = "./module/route53"
   domain_name           = "dobetabeta.shop"
   nexus_domain_name     = "nexus.dobetabeta.shop"
   nexus_lb_dns_name     = module.nexus.nexus-dns
