@@ -3,7 +3,7 @@ pipeline {
   tools {
     terraform 'terraform'
   }
-  // stages {
+  stages {
   //   stage('trivy scan') {
   //     steps {
   //       // Run the Trivy scan and save the output in HTML format
@@ -48,3 +48,4 @@ pipeline {
       }
     }
   }
+}
