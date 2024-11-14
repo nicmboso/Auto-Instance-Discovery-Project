@@ -1,12 +1,12 @@
 provider "aws" {
-  region  = "eu-west-1"
-  profile = "personal"
-  # profile = "team-20"
+  region = "eu-west-1"
+  # profile = "personal"
+  profile = "team-20"
 }
 
 resource "aws_instance" "jenkins" {
   ami                         = "ami-07d4917b6f95f5c2a"
-  instance_type               = "t2.xlarge"
+  instance_type               = "t3.medium"
   vpc_security_group_ids      = [aws_security_group.jenkins-sg.id]
   key_name                    = aws_key_pair.public-key.id
   iam_instance_profile        = aws_iam_instance_profile.jenkins_instance_profile.id
@@ -27,16 +27,16 @@ resource "tls_private_key" "keypair" {
 resource "local_file" "private-key" {
   content         = tls_private_key.keypair.private_key_pem
   filename        = "jenkins-key.pem"
-  file_permission = 600
+  file_permission = 660
 }
 
 resource "aws_key_pair" "public-key" {
-  key_name   = "jenkins-key"
+  key_name   = "jenkins-key-nicc"
   public_key = tls_private_key.keypair.public_key_openssh
 }
 
 resource "aws_security_group" "jenkins-sg" {
-  name = "jenkins-sg"
+  name = "jenkins-sg-nicc"
   ingress {
     description = "ssh"
     from_port   = 22
@@ -77,7 +77,7 @@ resource "aws_security_group" "jenkins-sg" {
 # # elb
 # Create a new load balancer
 resource "aws_elb" "jenkins-elb" {
-  name               = "jenkins-elb"
+  name               = "jenkins-elb-nicc"
   security_groups    = [aws_security_group.jenkins-sg.id]
   availability_zones = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 

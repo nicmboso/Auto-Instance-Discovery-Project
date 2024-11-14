@@ -8,10 +8,9 @@ terraform {
     bucket         = "nicc-s3bucket"
     key            = "infra-discovery/tfstate"
     dynamodb_table = "nicc-dynamoDB"
-    region         = "eu-central-1"
-    # region         = "eu-west-1"
+    region         = "eu-west-1"
     # encrypt = true
-    # profile = "team2"
+    # profile = "team-20"
   }
 }
 
