@@ -1,6 +1,5 @@
 provider "aws" {
-  region  = "eu-central-1"
-  # region  = "eu-west-1"
+  region  = "eu-west-1"
   profile = "team-20"
 }
 
@@ -12,18 +11,18 @@ resource "tls_private_key" "keypair" {
 
 resource "local_file" "private_key" {
   content         = tls_private_key.keypair.private_key_pem
-  filename        = "vault-private-key"
+  filename        = "vault-private-key-nicc"
   file_permission = "600"
 }
 
 resource "aws_key_pair" "public_key" {
-  key_name   = "vault-public-key"
+  key_name   = "vault-public-key-nicc"
   public_key = tls_private_key.keypair.public_key_openssh
 }
 
 # Vault SG
 resource "aws_security_group" "vault-sg" {
-  name        = "vault-sg"
+  name        = "vault-sg-nicc"
   description = "Vault Security Group"
 
 
@@ -72,7 +71,7 @@ resource "aws_kms_key" "vault-key" {
   description             = "This is the key to our vault server"
   deletion_window_in_days = 10
   tags = {
-    Name = "vault-kms-key"
+    Name = "vault-kms-key-nicc"
   }
 }
 
@@ -87,14 +86,14 @@ resource "aws_instance" "vault-server" {
     var2 = aws_kms_key.vault-key.id
   })
   tags = {
-    Name = "vault-server"
+    Name = "vault-server-nicc"
   }
 }
 
 #elb
 # Create a new load balancer
 resource "aws_elb" "vault-elb" {
-  name               = "vault-elb"
+  name               = "vault-elb-nicc"
   security_groups    = [aws_security_group.vault-sg.id]
   availability_zones = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 
@@ -122,7 +121,7 @@ resource "aws_elb" "vault-elb" {
   connection_draining_timeout = 400
 
   tags = {
-    Name = "vault-elb"
+    Name = "vault-elb-nicc"
   }
 }
 

@@ -1,24 +1,58 @@
 #!/bin/bash
 
-# Variables
+# # # Destroy Jenkins server
+cd ../Jenkins
+terraform destroy -auto-approve
+
+# Variables names
 BUCKET_NAME="nicc-s3bucket"
 DYNAMODB_TABLE_NAME="nicc-dynamoDB"
 REGION="eu-west-1"
-PROFILE="personal"
-# PROFILE="team-20"
+PROFILE="team-20"  
 
-# Delete all objects in the S3 bucket
-echo "Deleting all objects in S3 bucket: $BUCKET_NAME"
-aws s3 rm s3://$BUCKET_NAME --recursive --profile $PROFILE
+# Function to delete all objects in the S3 bucket and then the bucket itself
+delete_s3_bucket() {
+  echo "Deleting all objects from S3 bucket: $BUCKET_NAME"
+  
+  # Remove all objects and versions (if versioning is enabled) from the bucket
+  aws s3 rm s3://$BUCKET_NAME --recursive --profile $PROFILE
+  
+  if [ $? -eq 0 ]; then
+    echo "All objects deleted from bucket $BUCKET_NAME."
+    
+    echo "Deleting S3 bucket: $BUCKET_NAME"
+    # Now delete the empty bucket
+    aws s3api delete-bucket \
+      --bucket $BUCKET_NAME \
+      --region $REGION \
+      --profile $PROFILE \
 
-# Delete the S3 bucket
-echo "Deleting S3 bucket: $BUCKET_NAME"
-aws s3api delete-bucket --bucket $BUCKET_NAME --region $REGION --profile $PROFILE
+    if [ $? -eq 0 ]; then
+      echo "S3 bucket $BUCKET_NAME deleted successfully."
+    else
+      echo "Failed to delete S3 bucket."
+    fi
+  else
+    echo "Failed to delete objects from bucket."
+  fi
+}
 
-# Delete the DynamoDB table
-echo "Deleting DynamoDB table: $DYNAMODB_TABLE_NAME"
-aws dynamodb delete-table --table-name $DYNAMODB_TABLE_NAME --region $REGION --profile $PROFILE
+# Function to delete the DynamoDB table
+delete_dynamodb_table() {
+  echo "Deleting DynamoDB table: $DYNAMODB_TABLE_NAME"
+  
+  aws dynamodb delete-table \
+    --table-name $DYNAMODB_TABLE_NAME \
+    --region $REGION \
+    --profile $PROFILE
 
-# Wait for the DynamoDB table to be deleted
-echo "Waiting for DynamoDB table to be deleted"
-echo "S3 bucket and DynamoDB table deleted successfully."
+  if [ $? -eq 0 ]; then
+    echo "DynamoDB table $DYNAMODB_TABLE_NAME deleted successfully."
+  else
+    echo "Failed to delete DynamoDB table."
+  fi
+}
+
+# Delete S3 bucket and DynamoDB table
+delete_s3_bucket
+delete_dynamodb_table
