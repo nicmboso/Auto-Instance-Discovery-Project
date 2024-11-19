@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # # # Destroy Jenkins server
-cd ../Jenkins
+cd ./jenkins
 terraform destroy -auto-approve
 
-# Variables names
+# Variables
 BUCKET_NAME="nicc-s3bucket"
-DYNAMODB_TABLE_NAME="nicc-dynamoDB"
+TABLE_NAME="nicc-dynamoDB"
 REGION="eu-west-1"
-PROFILE="team-20"  
+PROFILE="team-20"
 
 # Function to delete all objects in the S3 bucket and then the bucket itself
 delete_s3_bucket() {
@@ -39,15 +39,15 @@ delete_s3_bucket() {
 
 # Function to delete the DynamoDB table
 delete_dynamodb_table() {
-  echo "Deleting DynamoDB table: $DYNAMODB_TABLE_NAME"
+  echo "Deleting DynamoDB table: $TABLE_NAME"
   
   aws dynamodb delete-table \
-    --table-name $DYNAMODB_TABLE_NAME \
+    --table-name $TABLE_NAME \
     --region $REGION \
     --profile $PROFILE
 
   if [ $? -eq 0 ]; then
-    echo "DynamoDB table $DYNAMODB_TABLE_NAME deleted successfully."
+    echo "DynamoDB table $TABLE_NAME deleted successfully."
   else
     echo "Failed to delete DynamoDB table."
   fi

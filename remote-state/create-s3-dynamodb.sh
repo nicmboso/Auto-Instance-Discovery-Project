@@ -1,10 +1,10 @@
 #!/bin/bash
 # set -x
-# Variables names
+# Variables
 BUCKET_NAME="nicc-s3bucket"
-DYNAMODB_TABLE_NAME="nicc-dynamoDB"
+TABLE_NAME="nicc-dynamoDB"
 REGION="eu-west-1"
-PROFILE="team-20"
+PROFILE="team-20" 
 
 # Function to create an S3 bucket
 create_s3_bucket() {
@@ -25,10 +25,10 @@ create_s3_bucket() {
 
 # Function to create a DynamoDB table
 create_dynamodb_table() {
-  echo "Creating DynamoDB table: $DYNAMODB_TABLE_NAME"
+  echo "Creating DynamoDB table: $TABLE_NAME"
   
   aws dynamodb create-table \
-    --table-name $DYNAMODB_TABLE_NAME \
+    --table-name $TABLE_NAME \
     --attribute-definitions AttributeName=LockID,AttributeType=S \
     --key-schema AttributeName=LockID,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
@@ -36,7 +36,7 @@ create_dynamodb_table() {
     --profile $PROFILE 
 
   if [ $? -eq 0 ]; then
-    echo "DynamoDB table $DYNAMODB_TABLE_NAME created successfully."
+    echo "DynamoDB table $TABLE_NAME created successfully."
   else
     echo "Failed to create DynamoDB table."
   fi
@@ -47,7 +47,7 @@ create_s3_bucket
 create_dynamodb_table
 
 # # # Create a Jenkins server
-cd ../Jenkins
+cd ./jenkins
 terraform init
 terraform fmt --recursive
 terraform validate

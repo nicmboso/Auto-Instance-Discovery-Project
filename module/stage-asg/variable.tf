@@ -1,7 +1,6 @@
 variable "vpc-id" {}
-variable "stage-id" {}
 variable "stage-sg" {}
-variable "priv-subnets" {}
+variable "stage-subnets" {}
 variable "alb-stage-name" {}
 variable "cert-arn" {}
 variable "redhat" {}

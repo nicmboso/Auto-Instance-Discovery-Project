@@ -6,7 +6,7 @@ resource "aws_instance" "nexus" {
   subnet_id                   = var.nexus-subnet
   key_name                    = var.public-key
   vpc_security_group_ids      = [var.nexus-sg]
-  user_data                   = file("./modules/nexus/nexus-script.sh")
+  user_data                   = file("./module/nexus/nexus-script.sh")
   tags = {
     Name = "nexus-server"
   }
