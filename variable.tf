@@ -1,2 +1,2 @@
-variable "newrelic-api" {}
+# variable "newrelic-api" {}
 # variable "vault_token" {}

@@ -75,8 +75,8 @@ module "ansible" {
   ansible-sg           = [module.security-group.ansible-sg]
   private-key          = module.keypair.private-key-pem
   bastion-host         = module.bastion-host.bastion-ip
-  # newrelic-license-key = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
-  newrelic-license-key = var.newrelic-api
+  newrelic-license-key = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
+  # newrelic-license-key = var.newrelic-api
   newrelic-acct-id     = "4566826"
   deployment           = "./module/ansible/deployment.yml"
   prod-bashscript      = "./module/ansible/prod-bashscript.sh"
@@ -104,8 +104,8 @@ module "production-asg" {
   # asg-sg = module.security-group.docker-sg
   pub-key               = module.keypair.public-key-id
   nex-ip = module.nexus.nexus-ip
-  newrelic-user-licence = var.newrelic-api
-  # newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
+  # newrelic-user-licence = var.newrelic-api
+  newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
   newrelic-acct-id      = 4566826
   newrelic-reg       = "EU"
   prod-asg-name         = "${local.name}-prod-asg"
@@ -124,8 +124,8 @@ module "stage-asg" {
   # asg-sg = module.security-group.docker-sg
   pub-key               = module.keypair.public-key-id
   nex-ip = module.nexus.nexus-ip
-  newrelic-user-licence = var.newrelic-api
-  # newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
+  # newrelic-user-licence = var.newrelic-api
+  newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
   newrelic-acct-id      = 4566826
   newrelic-reg       = "EU"
   stage-asg-name         = "${local.name}-stage-asg"
