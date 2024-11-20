@@ -125,7 +125,7 @@ data "aws_route53_zone" "dobetashop" {
 # load balancer of jenkins is linked directly to route53
 resource "aws_route53_record" "jenkins_record" {
   zone_id = data.aws_route53_zone.dobetashop.zone_id
-  name    = "jenkins.dobetabeta.shop"
+  name    = "jenkins2.dobetabeta.shop"
   type    = "A"
   alias {
     name                   = aws_elb.jenkins-elb.dns_name
