@@ -1,6 +1,6 @@
 provider "aws" {
   region = "eu-west-1"
-  profile = "team-20"
+  # profile = "team-20"
 }
 
 terraform {
@@ -19,8 +19,8 @@ terraform {
 provider "vault" {
   address = "https://vault.dobetabeta.shop"
   #login to vault server and pick the token
-  token = var.vault_token
-  # token = "s.EmgH5ULrQh3SDE0bxGsA0y3X"
+  # token = var.vault_token
+  token = "s.GiuwRWasilAjihvMJSdsPX0S"
 }
 
 data "vault_generic_secret" "vault-secret" {
