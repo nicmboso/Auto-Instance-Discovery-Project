@@ -26,3 +26,7 @@ provider "vault" {
 data "vault_generic_secret" "vault-secret" {
   path = "secret/database"
 }
+
+# data "vault_generic_secret" "vault-secret-2" {
+#   path = "secret/newrelic"
+# }
