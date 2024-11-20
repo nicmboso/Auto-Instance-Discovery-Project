@@ -99,11 +99,28 @@ sudo systemctl start vault
 sudo systemctl enable vault
 
 # #Set vault token/secret username and password
-touch /home/ubuntu/output.txt
-vault operator init > /home/ubuntu/output.txt
-grep -o 's\.[A-Za-z0-9]\{24\}' /home/ubuntu/output.txt > /home/ubuntu/token.txt
-token_content=$(</home/ubuntu/token.txt)
+export token_content=$(vault operator init|grep -o 's\.[A-Za-z0-9]\{24\}')
+# export token_content
+# touch /home/ubuntu/output.txt
+# vault operator init > /home/ubuntu/output.txt
+
+# # Path to the file containing the Vault token
+# VAULT_TOKEN_FILE="/home/ubuntu/output.txt"
+
+## Read the token from the file
+# grep -o 's\.[A-Za-z0-9]\{24\}' /home/ubuntu/output.txt > /home/ubuntu/token.txt
+# token_content=$(</home/ubuntu/token.txt)
+
+#login to vault with the token rom cmd line
 vault login $token_content
+
+# # Export the token as an environment variable
+# export VAULT_TOKEN=$token_content
+
+# Export the Terraform variable
+#via using the TF_VAR_ prefix to pass the variable to Terraform
+export TF_VAR_vault_token=$token_content
+
 vault secrets enable -path=secret/ kv #directory to store secrets on the vault server
 vault kv put secret/database username=petclinic password=petclinic
 

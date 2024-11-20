@@ -20,7 +20,7 @@ resource "aws_lb" "alb-stage" {
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [var.stage-sg]
-  subnets                    = var.priv-subnets
+  subnets                    = var.stage-subnets
   enable_deletion_protection = false
 
   tags = {
@@ -61,7 +61,7 @@ resource "aws_launch_template" "stage_lt" {
   instance_type          = "t2.medium"
   vpc_security_group_ids = [var.stage-sg]
   key_name               = var.pub-key
-  user_data = base64encode(templatefile("./modules/stage-asg/docker-script.sh", {
+  user_data = base64encode(templatefile("./module/stage-asg/docker-script.sh", {
     nexus-ip             = var.nex-ip,
     newrelic-license-key = var.newrelic-user-licence,
     newrelic-account-id  = var.newrelic-acct-id,

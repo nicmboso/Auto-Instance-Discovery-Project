@@ -30,13 +30,13 @@ module "keypair" {
 
 }
 
-module "docker" {
-  source       = "./module/docker"
-  redhat       = "ami-07d4917b6f95f5c2a"
-  docker-sg    = module.security-group.docker-sg
-  subnet-id    = module.vpc.pubsub-1-id
-  pub-key-name = module.keypair.public-key-id
-}
+# module "docker" {
+#   source       = "./module/docker"
+#   redhat       = "ami-07d4917b6f95f5c2a"
+#   docker-sg    = module.security-group.docker-sg
+#   subnet-id    = module.vpc.pubsub-1-id
+#   pub-key-name = module.keypair.public-key-id
+# }
 
 module "bastion-host" {
   source = "./module/bastion-host"
@@ -57,14 +57,14 @@ module "nexus" {
   cert-arn = data.aws_acm_certificate.certificate.arn
 }
 
-module "sonar" {
-  source       = "./module/sonar"
+module "sonarqube" {
+  source       = "./module/sonarqube"
   ubuntu       = "ami-0c38b837cd80f13bb"
-  pub_key      = module.keypair.public-key-id
+  public-key      = module.keypair.public-key-id
   sonar-sg     = module.security-group.sonarqube-sg
   sonar-subnet = module.vpc.pubsub-1-id
   cert-arn     = data.aws_acm_certificate.certificate.arn
-  subnets      = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id]
+  pub-subnets      = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id]
 }
 
 module "ansible" {
@@ -74,7 +74,8 @@ module "ansible" {
   pub-key              = module.keypair.public-key-id
   ansible-sg           = [module.security-group.ansible-sg]
   private-key          = module.keypair.private-key-pem
-  bastion-host         = module.bastion.bastion-ip
+  bastion-host         = module.bastion-host.bastion-ip
+  # newrelic-license-key = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
   newrelic-license-key = "${var.newrelic-api}"
   newrelic-acct-id     = "4566826"
   deployment           = "./module/ansible/deployment.yml"
@@ -93,41 +94,43 @@ module "rds" {
   rds-sg       = [module.security-group.rds-sg]
 }
 
-module "prod-asg" {
-  source        = "./module/prod-asg"
+module "production-asg" {
+  source        = "./module/production-asg"
   vpc-id        = module.vpc.vpc-id
   prod-sg       = module.security-group.docker-sg
-  subnets       = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id] #under load balancer configuration
-  name-alb-prod = "${local.name}-prod-asg"
+  prod-subnets       = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id] #under load balancer configuration
+  alb-prod-name = "${local.name}-prod-asg"
   redhat        = "ami-07d4917b6f95f5c2a"
   # asg-sg = module.security-group.docker-sg
   pub-key               = module.keypair.public-key-id
+  nex-ip = module.nexus.nexus-ip
+  newrelic-user-licence = "${var.newrelic-api}"
+  # newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
+  newrelic-acct-id      = 4566826
+  newrelic-reg       = "EU"
   prod-asg-name         = "${local.name}-prod-asg"
   vpc-zone-identifier   = [module.vpc.prvsub-1-id, module.vpc.prvsub-2-id] #under asg configuration
   prod-asg-policy-name  = "prod-asg-policy"
-  nexus-ip              = module.nexus.nexus-ip
-  newrelic-user-licence = "${var.newrelic-api}"
-  newrelic-acct-id      = 4566826
-  newrelic-region       = "EU"
   cert-arn              = data.aws_acm_certificate.certificate.arn
 }
 
 module "stage-asg" {
   source   = "./module/stage-asg"
-  vpc-id   = module.vpc.vpc-id
-  stage-sg = module.security-group.docker-sg
-  #subnet variable is under load balancer configuration
-  subnets               = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id]
-  name-alb-stage        = "${local.name}-stage-asg"
-  redhat                = "ami-07d4917b6f95f5c2a"
+  vpc-id        = module.vpc.vpc-id
+  stage-sg      = module.security-group.docker-sg
+  stage-subnets       = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id] #under load balancer configuration
+  alb-stage-name = "${local.name}-stage-asg"
+  redhat        = "ami-07d4917b6f95f5c2a"
+  # asg-sg = module.security-group.docker-sg
   pub-key               = module.keypair.public-key-id
-  stage-asg-name        = "${local.name}-stage-asg"
-  vpc-zone-identifier   = [module.vpc.prvsub-1-id, module.vpc.prvsub-2-id] #this variable is under asg configuration
-  stage-asg-policy-name = "stage-asg-policy"
-  nexus-ip              = module.nexus.nexus-ip
+  nex-ip = module.nexus.nexus-ip
   newrelic-user-licence = "${var.newrelic-api}"
+  # newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
   newrelic-acct-id      = 4566826
-  newrelic-region       = "EU"
+  newrelic-reg       = "EU"
+  stage-asg-name         = "${local.name}-stage-asg"
+  vpc-zone-identifier   = [module.vpc.prvsub-1-id, module.vpc.prvsub-2-id] #under asg configuration
+  stage-asg-policy-name  = "prod-asg-policy"
   cert-arn              = data.aws_acm_certificate.certificate.arn
 }
 
@@ -138,11 +141,11 @@ module "route53" {
   nexus_lb_dns_name     = module.nexus.nexus-dns
   nexus_lb_zone_id      = module.nexus.nexus-zone-id
   sonarqube_domain_name = "sonarqube.dobetabeta.shop"
-  sonarqube_lb_dns_name = module.sonar.sonarqube-dns
-  sonarqube_lb_zone_id  = module.sonar.sonarqube-zone-id
+  sonarqube_lb_dns_name = module.sonarqube.sonar-dns
+  sonarqube_lb_zone_id  = module.sonarqube.sonar-zone-id
   prod_domain_name      = "prod.dobetabeta.shop"
-  prod_lb_dns_name      = module.prod-asg.prod-lb-dns
-  prod_lb_zone_id       = module.prod-asg.prod-zone-id
+  prod_lb_dns_name      = module.production-asg.prod-lb-dns
+  prod_lb_zone_id       = module.production-asg.prod-zone-id
   stage_domain_name     = "stage.dobetabeta.shop"
   stage_lb_dns_name     = module.stage-asg.stage-lb-dns
   stage_lb_zone_id      = module.stage-asg.stage-zone-id

@@ -7,13 +7,13 @@ output "nexus" {
 }
 
 output "sonarqube" {
-  value = module.sonar.sonar-ip
+  value = module.sonarqube.sonar-ip
 }
 
 output "rds-endpoint" {
-  value = module.database.db-endpoint
+  value = module.rds.rds-endpoint
 }
 
 output "bastion-ip" {
-  value = module.bastion.bastion-ip
+  value = module.bastion-host.bastion-ip
 }

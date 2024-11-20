@@ -6,7 +6,7 @@ resource "aws_instance" "sonarqube" {
   vpc_security_group_ids      = [var.sonar-sg]
   subnet_id                   = var.sonar-subnet
   associate_public_ip_address = true
-  user_data                   = file("./module/sonarqube/sonar-script.sh")
+  user_data                   = file("./module/sonarqube/sonarqube-script.sh")
   tags = {
     Name = "sonar-server"
   }
@@ -35,7 +35,7 @@ resource "aws_elb" "sonar-elb" {
     interval            = 30
   }
 
-  instances                   = [aws_instance.sonar.id]
+  instances                   = [aws_instance.sonarqube.id]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true

@@ -1,0 +1,12 @@
+variable "redhat" {}
+variable "ansible-subnet" {}
+variable "pub-key" {}
+variable "ansible-sg" {}
+variable "private-key" {}
+variable "newrelic-license-key" {}
+variable "newrelic-acct-id" {}
+variable "bastion-host" {}
+variable "deployment" {}
+variable "prod-bashscript" {}
+variable "stage-bashscript" {}
+variable "nexus-ip" {}
