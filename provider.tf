@@ -12,7 +12,7 @@ terraform {
     dynamodb_table = "nicc-dynamoDB"
     region         = "eu-west-1"
     # encrypt = true
-    profile = "team-20"
+    # profile = "team-20"
   }
 }
 
