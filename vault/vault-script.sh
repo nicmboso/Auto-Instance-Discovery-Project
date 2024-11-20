@@ -123,6 +123,7 @@ export TF_VAR_vault_token=$token_content
 
 vault secrets enable -path=secret/ kv #directory to store secrets on the vault server
 vault kv put secret/database username=petclinic password=petclinic
+# vault kv put secret/newrelic nrkey=petclinic nracct=petclinic
 
 # Set hostname to Vault
 sudo hostnamectl set-hostname Vault
