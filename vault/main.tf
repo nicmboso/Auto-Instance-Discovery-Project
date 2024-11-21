@@ -12,7 +12,7 @@ resource "tls_private_key" "keypair" {
 resource "local_file" "private_key" {
   content         = tls_private_key.keypair.private_key_pem
   filename        = "vault-private-key-nicc"
-  file_permission = "600"
+  file_permission = "660"
 }
 
 resource "aws_key_pair" "public_key" {
