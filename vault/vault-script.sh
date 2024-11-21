@@ -98,6 +98,8 @@ echo "Vault server provisioned successfully."
 sudo systemctl start vault
 sudo systemctl enable vault
 
+sleep 20
+
 # #Set vault token/secret username and password
 export token_content=$(vault operator init|grep -o 's\.[A-Za-z0-9]\{24\}')
 # export token_content
@@ -122,6 +124,7 @@ vault login $token_content
 export TF_VAR_vault_token=$token_content
 
 vault secrets enable -path=secret/ kv #directory to store secrets on the vault server
+# vault secrets enable -path=secret-nr/ kv #directory to store secrets on the vault server
 vault kv put secret/database username=petclinic password=petclinic
 vault kv put secret/newrelic nr-key="NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K" nr-acct="4566826"
 
