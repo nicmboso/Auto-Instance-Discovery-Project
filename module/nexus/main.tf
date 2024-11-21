@@ -6,7 +6,13 @@ resource "aws_instance" "nexus" {
   subnet_id                   = var.nexus-subnet
   key_name                    = var.public-key
   vpc_security_group_ids      = [var.nexus-sg]
-  user_data                   = file("./module/nexus/nexus-script.sh")
+  user_data = base64encode(templatefile("./module/nexus/nexus-script.sh", {
+    newrelic-license-key = var.newrelic-user-licence,
+    newrelic-account-id  = var.newrelic-acct-id,
+    newrelic-region      = var.newrelic-reg
+
+  }))
+  # user_data                   = file("./module/nexus/nexus-script.sh")
   tags = {
     Name = "nexus-server"
   }

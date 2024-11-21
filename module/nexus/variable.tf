@@ -4,3 +4,6 @@ variable "public-key" {}
 variable "nexus-sg" {}
 variable "pub-subnets" {}
 variable "cert-arn" {}
+variable "newrelic-user-licence" {}
+variable "newrelic-acct-id" {}
+variable "newrelic-reg" {}
