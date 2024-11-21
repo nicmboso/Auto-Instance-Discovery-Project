@@ -104,9 +104,11 @@ module "production-asg" {
   # asg-sg = module.security-group.docker-sg
   pub-key               = module.keypair.public-key-id
   nex-ip = module.nexus.nexus-ip
+  newrelic-user-licence  = data.vault_generic_secret.vault-secret-nr.data[nr-key]
+   newrelic-acct-id      = data.vault_generic_secret.vault-secret-nr.data[data.nr-acct]
   # newrelic-user-licence = var.newrelic-api
-  newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
-  newrelic-acct-id      = 4566826
+  # newrelic-user-licence = "NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K"
+  # newrelic-acct-id      = 4566826
   newrelic-reg       = "EU"
   prod-asg-name         = "${local.name}-prod-asg"
   vpc-zone-identifier   = [module.vpc.prvsub-1-id, module.vpc.prvsub-2-id] #under asg configuration
