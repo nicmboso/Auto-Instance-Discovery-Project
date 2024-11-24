@@ -20,7 +20,7 @@ provider "vault" {
   address = "https://vault.dobetabeta.shop"
   #login to vault server and pick the token
   # token = var.vault_token
-  token = "s.t9PVG3S4DJLLCZuZDXYPAW0Y"
+  token = "s.q99pWTj2kQhHFCxSZ5epRXrR"
 }
 
 data "vault_generic_secret" "vault-secret" {
