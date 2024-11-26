@@ -101,31 +101,16 @@ sudo systemctl enable vault
 sleep 30
 
 # #Set vault token/secret username and password
-export token_content=$(vault operator init|grep -o 's\.[A-Za-z0-9]\{24\}')
-# export token_content
-# touch /home/ubuntu/output.txt
-# vault operator init > /home/ubuntu/output.txt
-
-# # Path to the file containing the Vault token
-# VAULT_TOKEN_FILE="/home/ubuntu/output.txt"
-
-## Read the token from the file
-# grep -o 's\.[A-Za-z0-9]\{24\}' /home/ubuntu/output.txt > /home/ubuntu/token.txt
-# token_content=$(</home/ubuntu/token.txt)
+echo $(vault operator init) > /home/ubuntu/output.txt
+sudo chown ubuntu:ubuntu /home/ubuntu/output.txt
+export token_content=$(cat /home/ubuntu/output.txt|grep -o 'hvs\.[A-Za-z0-9]\{24\}')
+echo $token_content > /home/ubuntu/token.txt
+sudo chown ubuntu:ubuntu /home/ubuntu/token.txt
 
 #login to vault with the token rom cmd line
 vault login $token_content
 
-# # Export the token as an environment variable
-# export VAULT_TOKEN=$token_content
-
-# Export the Terraform variable
-#via using the TF_VAR_ prefix to pass the variable to Terraform
-export TF_VAR_vault_token=$token_content
-
-vault secrets enable -path=secret/ kv #directory to store secrets on the vault server
-vault kv put secret/database username="${var.dbuser}" password="${var.dbpass}"
-vault kv put secret/newrelic nr-key="${var.nr-api}" nr-acct="${var.nr-acc}"
-
-# Set hostname to Vault
-sudo hostnamectl set-hostname Vault
+vault secrets enable -path=secret/ kv
+vault kv put secret/database username=petclinic password=petclinic
+vault kv put secret/newrelic NEW_RELIC_API_KEY="NRAK-HT4BH2DUV9UXVFLS3T967UDSA3K" NEW_RELIC_ACCOUNT_ID="4566826"
+sudo hostnamectl set-hostname vault
