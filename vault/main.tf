@@ -11,7 +11,7 @@ resource "tls_private_key" "keypair" {
 
 resource "local_file" "private_key" {
   content         = tls_private_key.keypair.private_key_pem
-  filename        = "vault-private-key-nicc"
+  filename        = "vault-private-key-nicc.pem"
   file_permission = "660"
 }
 
@@ -155,6 +155,6 @@ resource "time_sleep" "wait_5_minutes" {
 resource "null_resource" "fetch-token" {
   depends_on = [aws_instance.vault-server, time_sleep.wait_5_minutes]
   provisioner "local-exec" {
-    command = "scp -o StrictHostKeyChecking=no -i ./vault-private-key-nicc ubuntu@${aws_instance.vault-server.public_ip}:/home/ubuntu/token.txt ."
+    command = "scp -o StrictHostKeyChecking=no -i ./vault-private-key-nicc.pem ubuntu@${aws_instance.vault-server.public_ip}:/home/ubuntu/token.txt ."
   }
 }

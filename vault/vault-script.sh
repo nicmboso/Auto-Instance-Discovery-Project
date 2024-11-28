@@ -103,7 +103,7 @@ sleep 30
 # #Set vault token/secret username and password
 echo $(vault operator init) > /home/ubuntu/output.txt
 sudo chown ubuntu:ubuntu /home/ubuntu/output.txt
-export token_content=$(cat /home/ubuntu/output.txt|grep -o 'hvs\.[A-Za-z0-9]\{24\}')
+export token_content=$(cat /home/ubuntu/output.txt|grep -o 's\.[A-Za-z0-9]\{24\}')
 echo -n "$token_content" > /home/ubuntu/token.txt
 sudo chown ubuntu:ubuntu /home/ubuntu/token.txt
 
