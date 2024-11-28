@@ -55,8 +55,8 @@ module "nexus" {
   nexus-sg = module.security-group.nexus-sg
   pub-subnets = [module.vpc.pubsub-1-id, module.vpc.pubsub-2-id]
   cert-arn = data.aws_acm_certificate.certificate.arn
-  newrelic-user-licence = data.vault_generic_secret.vault-secret-nr.data["nr-key"]
-  newrelic-acct-id = data.vault_generic_secret.vault-secret-nr.data["nr-acct"]
+  newrelic-user-licence = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_ACCOUNT_ID"]
+  newrelic-acct-id = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_API_KEY"]
   newrelic-reg = "EU"
 }
 
@@ -78,8 +78,8 @@ module "ansible" {
   ansible-sg           = [module.security-group.ansible-sg]
   private-key          = module.keypair.private-key-pem
   bastion-host         = module.bastion-host.bastion-ip
-  newrelic-license-key  = data.vault_generic_secret.vault-secret-nr.data["nr-key"]
-  newrelic-acct-id      = data.vault_generic_secret.vault-secret-nr.data["nr-acct"]
+  newrelic-license-key  = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_API_KEY"]
+  newrelic-acct-id      = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_ACCOUNT_ID"]
   deployment           = "./module/ansible/deployment.yml"
   prod-bashscript      = "./module/ansible/prod-bashscript.sh"
   stage-bashscript     = "./module/ansible/stage-bashscript.sh"
@@ -106,8 +106,8 @@ module "production-asg" {
   # asg-sg = module.security-group.docker-sg
   pub-key               = module.keypair.public-key-id
   nex-ip = module.nexus.nexus-ip
-  newrelic-user-licence  = data.vault_generic_secret.vault-secret-nr.data["nr-key"]
-  newrelic-acct-id      = data.vault_generic_secret.vault-secret-nr.data["nr-acct"]
+  newrelic-user-licence  = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_API_KEY"]
+  newrelic-acct-id      = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_ACCOUNT_ID"]
   # newrelic-user-licence = var.newrelic-api
   newrelic-reg       = "EU"
   prod-asg-name         = "${local.name}-prod-asg"
@@ -127,8 +127,8 @@ module "stage-asg" {
   pub-key               = module.keypair.public-key-id
   nex-ip = module.nexus.nexus-ip
   # newrelic-user-licence = var.newrelic-api
-  newrelic-user-licence  = data.vault_generic_secret.vault-secret-nr.data["nr-key"]
-  newrelic-acct-id      = data.vault_generic_secret.vault-secret-nr.data["nr-acct"]
+  newrelic-user-licence  = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_API_KEY"]
+  newrelic-acct-id      = data.vault_generic_secret.vault-secret-nr.data["NEW_RELIC_ACCOUNT_ID"]
   newrelic-reg       = "EU"
   stage-asg-name         = "${local.name}-stage-asg"
   vpc-zone-identifier   = [module.vpc.prvsub-1-id, module.vpc.prvsub-2-id] #under asg configuration
