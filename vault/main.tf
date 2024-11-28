@@ -146,3 +146,15 @@ data "aws_acm_certificate" "certificate" {
   types       = ["AMAZON_ISSUED"]
   most_recent = true
 }
+
+# Creating a time sleep resource to delay the excecution of our local exec which help us to fetch the vault token from the vault server after it has been created.
+resource "time_sleep" "wait_5_minutes" {
+  depends_on      = [aws_instance.vault-server]
+  create_duration = "300s"
+}
+resource "null_resource" "fetch-token" {
+  depends_on = [aws_instance.vault-server, time_sleep.wait_5_minutes]
+  provisioner "local-exec" {
+    command = "scp -o StrictHostKeyChecking=no -i ./vault-private-key-nicc ubuntu@${aws_instance.vault-server.public_ip}:/home/ubuntu/token.txt ."
+  }
+}
