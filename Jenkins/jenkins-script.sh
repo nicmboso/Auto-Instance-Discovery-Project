@@ -24,6 +24,8 @@ sudo systemctl start docker
 #Add ec2-user and jenkins to docker group
 sudo usermod -aG docker ec2-user
 sudo usermod -aG docker jenkins
+sudo chmod 777 /var/run/docker.sock
+
 
 # Install trivy for container scanning
 RELEASE_VERSION=$(grep -Po '(?<=VERSION_ID=")[0-9]' /etc/os-release)
