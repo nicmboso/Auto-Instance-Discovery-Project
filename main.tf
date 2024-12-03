@@ -139,16 +139,16 @@ module "stage-asg" {
 module "route53" {
   source                = "./module/route53"
   domain_name           = "dobetabeta.shop"
-  nexus_domain_name     = "nexus.dobetabeta.shop"
+  nexus_domain_name     = "nexus2.dobetabeta.shop"
   nexus_lb_dns_name     = module.nexus.nexus-dns
   nexus_lb_zone_id      = module.nexus.nexus-zone-id
-  sonarqube_domain_name = "sonarqube.dobetabeta.shop"
+  sonarqube_domain_name = "sonarqube2.dobetabeta.shop"
   sonarqube_lb_dns_name = module.sonarqube.sonar-dns
   sonarqube_lb_zone_id  = module.sonarqube.sonar-zone-id
-  prod_domain_name      = "prod.dobetabeta.shop"
+  prod_domain_name      = "prod2.dobetabeta.shop"
   prod_lb_dns_name      = module.production-asg.prod-lb-dns
   prod_lb_zone_id       = module.production-asg.prod-zone-id
-  stage_domain_name     = "stage.dobetabeta.shop"
+  stage_domain_name     = "stage2.dobetabeta.shop"
   stage_lb_dns_name     = module.stage-asg.stage-lb-dns
   stage_lb_zone_id      = module.stage-asg.stage-zone-id
 }
