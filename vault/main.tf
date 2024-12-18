@@ -1,7 +1,6 @@
 provider "aws" {
   region  = "eu-west-1"
-  profile = "team-20"
-  # profile = "personal"
+  profile = "personal"
 }
 
 # dynamic keypair resource
@@ -127,13 +126,13 @@ resource "aws_elb" "vault-elb" {
 }
 
 data "aws_route53_zone" "route53" {
-  name         = "dobetabeta.shop"
+  name         = "dobeta.shop"
   private_zone = false
 }
 
 resource "aws_route53_record" "vault_record" {
   zone_id = data.aws_route53_zone.route53.zone_id
-  name    = "vault.dobetabeta.shop"
+  name    = "vault.dobeta.shop"
   type    = "A"
   alias {
     name                   = aws_elb.vault-elb.dns_name
@@ -143,7 +142,7 @@ resource "aws_route53_record" "vault_record" {
 }
 
 data "aws_acm_certificate" "certificate" {
-  domain      = "dobetabeta.shop"
+  domain      = "dobeta.shop"
   types       = ["AMAZON_ISSUED"]
   most_recent = true
 }

@@ -8,8 +8,7 @@ terraform destroy -auto-approve
 BUCKET_NAME="nicc-s3bucket"
 TABLE_NAME="nicc-dynamoDB"
 REGION="eu-west-1"
-PROFILE="team-20"
-# PROFILE="personal"
+PROFILE="personal"
 
 # Function to delete all objects in the S3 bucket and then the bucket itself
 delete_s3_bucket() {
