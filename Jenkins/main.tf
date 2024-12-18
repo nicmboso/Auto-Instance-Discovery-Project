@@ -1,7 +1,6 @@
 provider "aws" {
   region  = "eu-west-1"
-  profile = "team-20"
-  # profile = "personal"
+  profile = "personal"
 }
 
 resource "aws_instance" "jenkins" {
@@ -109,14 +108,14 @@ resource "aws_elb" "jenkins-elb" {
 }
 
 data "aws_route53_zone" "dobetashop" {
-  name         = "dobetabeta.shop"
+  name         = "dobeta.shop"
   private_zone = false
 }
 
 # # #IP address of jenkins is linked directly to IP
 # resource "aws_route53_record" "jenkins_record" {
 #   zone_id = data.aws_route53_zone.route53.zone_id
-#   name    = "jenkins.dobetabeta.shop"
+#   name    = "jenkins.dobeta.shop"
 #   type    = "A"
 #   ttl     = 300
 #   records = [aws_instance.jenkins.public_ip]
@@ -125,7 +124,7 @@ data "aws_route53_zone" "dobetashop" {
 # load balancer of jenkins is linked directly to route53
 resource "aws_route53_record" "jenkins_record" {
   zone_id = data.aws_route53_zone.dobetashop.zone_id
-  name    = "jenkins2.dobetabeta.shop"
+  name    = "jenkins2.dobeta.shop"
   type    = "A"
   alias {
     name                   = aws_elb.jenkins-elb.dns_name
@@ -136,8 +135,8 @@ resource "aws_route53_record" "jenkins_record" {
 
 #creates the acm
 resource "aws_acm_certificate" "ssl-cert" {
-  domain_name               = "dobetabeta.shop"
-  subject_alternative_names = ["*.dobetabeta.shop"]
+  domain_name               = "dobeta.shop"
+  subject_alternative_names = ["*.dobeta.shop"]
   validation_method         = "DNS"
   lifecycle {
     create_before_destroy = true

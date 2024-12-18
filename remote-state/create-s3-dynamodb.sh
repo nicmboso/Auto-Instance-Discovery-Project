@@ -4,8 +4,7 @@
 BUCKET_NAME="nicc-s3bucket"
 TABLE_NAME="nicc-dynamoDB"
 REGION="eu-west-1"
-PROFILE="team-20" 
-# PROFILE="personal" 
+PROFILE="personal" 
 
 # Function to create an S3 bucket
 create_s3_bucket() {
