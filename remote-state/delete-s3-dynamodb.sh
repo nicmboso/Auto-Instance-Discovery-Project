@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # # # Destroy Jenkins server
-cd ./jenkins
-terraform destroy -auto-approve
+# cd ./jenkins
+# terraform destroy -auto-approve
 
 # Variables
 BUCKET_NAME="nicc-s3bucket"
