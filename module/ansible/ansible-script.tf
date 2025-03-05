@@ -25,14 +25,16 @@ export AWS_ACCESS_KEY_ID=${aws_iam_access_key.ansible.id}
 export AWS_SECRET_ACCESS_KEY=${aws_iam_access_key.ansible.secret}
 
 # installing ansible repository
-sudo wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
-sudo yum install epel/epel-release-latest-9.noarch.rpm
+
+#sudo wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+#sudo yum install epel-release-latest-9.noarch.rpm -y
 #wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 #sudo yum install epel-release-latest-7.noarch.rpm -y
-sudo yum update -y
+#sudo yum update -y
 
 # Install ansible
-sudo yum install ansible -y
+sudo dnf install ansible-core -y
+#sudo yum install ansible -y
 
 # Copy private key into ansible server /home/ec2-user/.ssh/ directory
 sudo echo "${var.private-key}" > /home/ec2-user/.ssh/id_rsa
