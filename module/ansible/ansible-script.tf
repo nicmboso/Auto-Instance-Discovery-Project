@@ -16,7 +16,7 @@ sudo ln -svf /usr/local/bin/aws /usr/bin/aws
 # Configuring awscli
 # execute cmd as ec2-user
 sudo su -c "aws configure set aws_access_key_id ${aws_iam_access_key.ansible.id}" ec2-user
-sudo su -c "aws configure set aws_secret_access_key_id ${aws_iam_access_key.ansible.secret}" ec2-user
+sudo su -c "aws configure set aws_secret_access_key ${aws_iam_access_key.ansible.secret}" ec2-user
 sudo su -c "aws configure set default.region eu-west-1" ec2-user
 sudo su -c "aws configure set default.output text" ec2-user
 
