@@ -41,7 +41,7 @@ sudo echo "${var.private-key}" > /home/ec2-user/.ssh/id_rsa
 
 #Give permission to copied file
 sudo chown -R ec2-user:ec2-user /home/ec2-user/.ssh/id_rsa
-sudo chmod 400 /home/ec2-user/.ssh/id_rsa
+sudo chmod 600 /home/ec2-user/.ssh/id_rsa
 
 # Copying our files to ansible server from our local machine
 sudo echo "${file(var.deployment)}" >> /etc/ansible/deployment.yml
